@@ -2,49 +2,64 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+//import com.shprobotics.pestocore.drivebases.DeterministicTracker;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-public class WCRobot extends LinearOpMode {
+@TeleOp
+public class WCRobot extends LinearOpMode
+{
         DcMotor motorLeft;
-        DcMotor motorRight;
+//    DeterministicTracker tracker;
+
+    DcMotor motorRight;
         DcMotor frontLeft;
-        DcMotor frontRight;
+    DcMotor backRight;
+    DcMotor backLeft;
+    DcMotor Outtake; //port 2 epansion
+    DcMotor Intake; //port 2 epansion
+
+    DcMotor frontRight;
         ColorSensor color1;
         DistanceSensor distance1;
-        BNO055IMU imu;
+//        BNO055IMU imu;
 
-        public void turnCCW(int deg) {
-            motorLeft.setPower(-1);
-            motorRight.setPower(1);
-            sleep((long)460 / 90 * deg);
-            turnOff();
-        }
-        public void turnCW(int deg) {
-            motorLeft.setPower(1);
-            motorRight.setPower(-1);
-            sleep((long)460 / 90 * deg);
-            turnOff();
-        }
+//        public void turnCCW(int deg) {
+//            motorLeft.setPower(-1);
+//            motorRight.setPower(1);
+//            sleep((long)460 / 90 * deg);
+//            turnOff();
+//        }
+//        public void turnCW(int deg) {
+//            motorLeft.setPower(1);
+//            motorRight.setPower(-1);
+//            sleep((long)460 / 90 * deg);
+//            turnOff();
+//        }
         public void turnOff() {
-            motorLeft.setPower(0);
-            motorRight.setPower(0);
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backRight.setPower(0);
+            backLeft.setPower(0);
         }
         public void moveForward(int steps, double speed) {
-            motorLeft.setPower(speed );
-            motorRight.setPower(speed);
+            frontLeft.setPower(speed);
+            frontRight.setPower(speed);
+            backLeft.setPower(speed);
+            backRight.setPower(speed);
             sleep((long) steps * 100);
             turnOff();
         }
-        public void setWheelPower(int steps, double left, double right) {
-            motorLeft.setPower(left);
-            motorRight.setPower(right);
-            sleep((long) steps * 100);
-            turnOff();
-        }
+//        public void setWheelPower(int steps, double left, double right) {
+//            frontLeft.setPower(left);
+//            backLeft.setPower(right);
+//            sleep((long) steps * 100);
+//            turnOff();
+//        }
         public void addColorTelemetry() {
             telemetry.addData("Red", (color1.red()));
             telemetry.addData("Blue", (color1.blue()));
@@ -52,17 +67,17 @@ public class WCRobot extends LinearOpMode {
         }
 
         public void moveUntilWall() {
-            while (distance1.getDistance(DistanceUnit.CM) >= 50) {
-                moveForward(1,1);
-            }
+//            while (distance1.getDistance(DistanceUnit.CM) >= 50) {
+//                moveForward(1,1);
+//            }
         }
         public void outtake() {
-            frontLeft.setPower(0.1);
-            frontRight.setPower(0.1);
+//            frontLeft.setPower(0.1);
+//            frontRight.setPower(0.1);
         }
         public void intake() {
-            frontLeft.setPower(-1);
-            frontRight.setPower(-1);
+//            frontLeft.setPower(-1);
+//            frontRight.setPower(-1);
         }
 //        public boolean isWallInFront() {
 //              return (distance1.getDistance(DistanceUnit.CM) <= 60)
@@ -70,19 +85,34 @@ public class WCRobot extends LinearOpMode {
 
         @Override
         public void runOpMode() {
-            motorLeft = hardwareMap.get(DcMotor.class, "motorLeft");
-            motorRight = hardwareMap.get(DcMotor.class, "motorRight");
+            Intake = hardwareMap.get(DcMotor.class, "intake");
+            Outtake = hardwareMap.get(DcMotor.class, "outtake");
             frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
             frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-            color1 = hardwareMap.get(ColorSensor.class, "color1");
-            distance1 = hardwareMap.get(DistanceSensor.class, "distance1");
-            imu = hardwareMap.get(BNO055IMU.class, "imu");
-            motorLeft.setDirection(DcMotor.Direction.REVERSE);
+            backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+            backRight = hardwareMap.get(DcMotor.class, "backRight");
+//            imu = hardwareMap.get(BNO055IMU.class, "imu");
+            frontLeft.setDirection(DcMotor.Direction.REVERSE);
+            backLeft.setDirection(DcMotor.Direction.REVERSE);
 
             waitForStart();
+
+            while (opModeIsActive() && !isStopRequested()) {
+
+                    Outtake.setPower(-gamepad1.left_trigger*4);
+                    Intake.setPower(gamepad1.left_trigger*4);
+
+                frontLeft.setPower(gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
+                frontRight.setPower(gamepad1.left_stick_y + gamepad1.left_stick_x+gamepad1.right_stick_x);
+                backLeft.setPower(gamepad1.left_stick_y + gamepad1.left_stick_x-gamepad1.right_stick_x);
+                backRight.setPower(gamepad1.left_stick_y - gamepad1.left_stick_x+gamepad1.right_stick_x );
+            }
+
             sleep(100);
-            moveForward(5, 1);
-            turnCW(90);
+            moveForward(5, 1.0);
+//            turnCW(90);
+//            moveForward(5, 1.0);
+//            turnCW(90);
 
         }
     }
