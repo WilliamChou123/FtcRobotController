@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 //import com.shprobotics.pestocore.drivebases.DeterministicTracker;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -82,7 +83,13 @@ public class WCRobot extends LinearOpMode
 //        public boolean isWallInFront() {
 //              return (distance1.getDistance(DistanceUnit.CM) <= 60)
 //        }
+public void robotOrientedDrive(Gamepad gamepadStick){
 
+    frontLeft.setPower(gamepadStick.left_stick_y - gamepadStick.left_stick_x - gamepadStick.right_stick_x);
+    frontRight.setPower(gamepadStick.left_stick_y + gamepadStick.left_stick_x+gamepadStick.right_stick_x);
+    backLeft.setPower(gamepadStick.left_stick_y + gamepadStick.left_stick_x-gamepadStick.right_stick_x);
+    backRight.setPower(gamepadStick.left_stick_y - gamepadStick.left_stick_x+gamepadStick.right_stick_x );
+}
         @Override
         public void runOpMode() {
             Intake = hardwareMap.get(DcMotor.class, "intake");
@@ -94,26 +101,16 @@ public class WCRobot extends LinearOpMode
 //            imu = hardwareMap.get(BNO055IMU.class, "imu");
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
-
             waitForStart();
-
             while (opModeIsActive() && !isStopRequested()) {
 
                     Outtake.setPower(-gamepad1.left_trigger*4);
                     Intake.setPower(gamepad1.left_trigger*4);
 
-                frontLeft.setPower(gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
-                frontRight.setPower(gamepad1.left_stick_y + gamepad1.left_stick_x+gamepad1.right_stick_x);
-                backLeft.setPower(gamepad1.left_stick_y + gamepad1.left_stick_x-gamepad1.right_stick_x);
-                backRight.setPower(gamepad1.left_stick_y - gamepad1.left_stick_x+gamepad1.right_stick_x );
+               robotOrientedDrive(gamepad1);
             }
-
             sleep(100);
             moveForward(5, 1.0);
-//            turnCW(90);
-//            moveForward(5, 1.0);
-//            turnCW(90);
-
         }
     }
 
