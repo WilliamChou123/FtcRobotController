@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -8,18 +7,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-@TeleOp(name = "WCRobot", group = "Linear Opmode")
-public class WCRobot extends LinearOpMode {
+@TeleOp
+public class freshman extends LinearOpMode {
     DcMotor frontLeft;
     DcMotor backRight;
     DcMotor backLeft;
-    DcMotor Outtake; //port 2 epansion
-    DcMotor Intake; //port 2 epansion
 
     DcMotor frontRight;
     ColorSensor color1;
     DistanceSensor distance1;
-    BNO055IMU imu;
+//        BNO055IMU imu;
 
     //        public void turnCCW(int deg) {
 //            motorLeft.setPower(-1);
@@ -88,53 +85,21 @@ public class WCRobot extends LinearOpMode {
         backRight.setPower(gamepadStick.left_stick_y - gamepadStick.left_stick_x + gamepadStick.right_stick_x);
     }
 
-    private double error = 0.5;
-
-    public void turnCW(double targetAngle) {
-        double Kp = 0.01; // Adjust this experimentally
-        double error = targetAngle - imu.getAngularOrientation().firstAngle;
-
-        while (Math.abs(error) > 1) { // 1 degree tolerance
-            error = targetAngle - imu.getAngularOrientation().firstAngle;
-
-            double power = Kp * error;
-
-            // Limit motor power
-            power = Math.max(Math.min(power, 0.5), -0.5);
-
-            // Mecanum turn: CW
-            frontLeft.setPower(power);
-            backLeft.setPower(power);
-            frontRight.setPower(-power);
-            backRight.setPower(-power);
-
-            sleep(10); // Prevent CPU hogging
-        }
-
-        // Stop all motors
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
-    }
-
     @Override
     public void runOpMode() {
-        Intake = hardwareMap.get(DcMotor.class, "intake");
-        Outtake = hardwareMap.get(DcMotor.class, "outtake");
+
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+//            imu = hardwareMap.get(BNO055IMU.class, "imu");
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
-        Outtake.setDirection(DcMotor.Direction.REVERSE);
-
+//
+//        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+//        backLeft.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
-            Outtake.setPower(-gamepad1.left_trigger * 1.5);
-            Intake.setPower(gamepad1.left_trigger * 2);
             robotOrientedDrive(gamepad1);
         }
         sleep(100);
