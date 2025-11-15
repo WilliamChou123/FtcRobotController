@@ -17,12 +17,48 @@ public class WCRobotAuto extends LinearOpMode {
     WCRobotMethods robotNew;
 
     @Override
+
     public void runOpMode() {
+        waitForStart();
         robotNew = new WCRobotMethods(hardwareMap, telemetry);
-        robotNew.moveTo(0, 10);
-        robotNew.moveTo(10, 0);
-        robotNew.moveTo(0, -10);
-        robotNew.moveTo(-10, 0);
+        robotNew.initImu();
+        robotNew.resetIMU();
+
+
+        robotNew.moveForward(2);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+        }
+        robotNew.rotate(0.21);
+        robotNew.moveForward(1.1);
+        double lastTime = getRuntime();
+        while (getRuntime() < 25 && !isStopRequested()) {
+            telemetry.addData("time", getRuntime());
+            telemetry.update();
+            if (getRuntime() - lastTime > 2.2) {
+//                robotNew.rotate(0.1);
+                robotNew.Outtake.setPower(1);
+                robotNew.Intake.setPower(1);
+//                robotNew.rotate(-0.1);
+            } else {
+                robotNew.Outtake.setPower(1);
+            }
+        }
+        robotNew.rotateOp(1.25);
+
+//        robotNew.turnTo(90);
+
+//        try {
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//        }
+//        try {
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//        }
+//        robotNew.moveForward(10);
+
     }
 }
 
