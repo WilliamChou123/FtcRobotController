@@ -35,24 +35,29 @@ public class WCRobotMethods {
     DcMotor deadWheelLeft;
     DcMotor deadWheelRight;
     DcMotor deadWheelCenter;
-    DcMotor slide1;
-    DcMotor slide2;
+    //    DcMotor slide1;
+//    DcMotor slide2;
+    DcMotor Middle;
+    DcMotor Gecko;
     double imu_zero;
 
 
     public WCRobotMethods(HardwareMap hardwareMap, Telemetry t) {
         telemetry = t;
         Intake = hardwareMap.get(DcMotor.class, "intake");
+        Middle = hardwareMap.get(DcMotor.class, "mid");
         Outtake = hardwareMap.get(DcMotor.class, "outtake");
+        Gecko = hardwareMap.get(DcMotor.class, "gecko");
 
-        slide1 = hardwareMap.get(DcMotor.class, "slide1");
-        slide2 = hardwareMap.get(DcMotor.class, "slide2");
+
+//        slide1 = hardwareMap.get(DcMotor.class, "slide1");
+//        slide2 = hardwareMap.get(DcMotor.class, "slide2");
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
-//DeadWheels
+        //DeadWheels
         deadWheelCenter = hardwareMap.get(DcMotor.class, "frontRight");
         deadWheelRight = hardwareMap.get(DcMotor.class, "backRight");
         deadWheelLeft = hardwareMap.get(DcMotor.class, "frontLeft");
@@ -89,40 +94,6 @@ public class WCRobotMethods {
         backLeft.setPower(0);
     }
 
-    public void moveSlide1(int value) {
-
-        slide1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slide2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slide1.setTargetPosition(value);
-        slide2.setTargetPosition(value);
-        slide1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slide1.setPower(0.1);
-        slide2.setPower(0.1);//without blue
-
-
-    }
-
-    public void moveSlide2(double value) {
-        slide2.setPower(value);
-
-
-    }
-
-    public void resetSlides() {
-        slide1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void pauseSlide() {
-        slide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slide2.setTargetPosition(slide2.getCurrentPosition());
-        slide1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slide1.setTargetPosition(slide1.getCurrentPosition());
-
-    }
 
     public void driveWithStick(Gamepad gamepadStick) {
         robotOrientedDrive(gamepadStick.left_stick_x, -gamepadStick.left_stick_y, gamepadStick.right_stick_x);
@@ -192,6 +163,11 @@ public class WCRobotMethods {
         stopAll();
     }
 
+    public void moveMid(double power) {
+        Middle.setPower(power);
+        Intake.setPower(power);
+        Gecko.setPower(power);
+    }
 
     public void initImu() {
         IMU.Parameters myIMUparameters;

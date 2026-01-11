@@ -32,18 +32,13 @@ public class WCRobotNew extends LinearOpMode {
 
             telemetry.addData("pos", pos);
             telemetry.addData("lastTime", getRuntime() - lastTime);
-            telemetry.addData("slide1", robotNew.slide1.getCurrentPosition());
-            telemetry.addData("slide2", robotNew.slide2.getCurrentPosition());
             telemetry.addData("slidePos", slidePos);
 
             robotNew.updateTelemetry(telemetry);
-
-//            robotNew.Outtake.setPower(gamepad1.right_trigger * 0.8 - (gamepad1.a ? 1 : 0));
-//            robotNew.Intake.setPower(gamepad1.left_trigger * 1 - (gamepad1.a ? 1 : 0));
             if (gamepad1.right_bumper) {
                 if (getRuntime() - lastTime > 2.2) {
-                    robotNew.Outtake.setPower(1.5);
-                    robotNew.Intake.setPower(2);
+                    robotNew.Outtake.setPower(1);
+                    robotNew.Middle.setPower(1);
                 } else {
                     robotNew.Outtake.setPower(1);
                 }
@@ -56,14 +51,15 @@ public class WCRobotNew extends LinearOpMode {
 //            if (slidePos >= 0 && slidePos < 1000) {
 //                slidePos += Math.round(gamepad1.left_stick_y);
 //            }
-            if (gamepad2.left_stick_y > 0.1) {
-                robotNew.moveSlide1(400);
-            }
-//            robotNew.moveSlide1(slidePos);
-           
-            if (gamepad1.right_bumper) {
-                robotNew.resetSlides();
-            }
+//            if (gamepad2.left_stick_y > 0.1) {
+//                robotNew.moveSlide1(400);
+//            }
+////            robotNew.moveSlide1(slidePos);
+//
+//            if (gamepad1.right_bumper) {
+//                robotNew.resetSlides();
+//            }
+            robotNew.moveMid(gamepad1.left_trigger);
             if (gamepad1.right_trigger > 0.5) {
                 robotNew.robotOrientedDrive(-gamepad1.left_stick_x * 0.3, gamepad1.left_stick_y * 0.3, gamepad1.right_stick_x * 0.3);
             } else {

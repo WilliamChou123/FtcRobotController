@@ -16,6 +16,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class WCRobotAuto extends LinearOpMode {
     WCRobotMethods robotNew;
 
+    public void sleep(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+        }
+    }
+
     @Override
 
     public void runOpMode() {
@@ -23,13 +30,9 @@ public class WCRobotAuto extends LinearOpMode {
         robotNew = new WCRobotMethods(hardwareMap, telemetry);
         robotNew.initImu();
         robotNew.resetIMU();
-
-
         robotNew.moveForward(2);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-        }
+        sleep(1000);
+
         robotNew.rotate(0.21);
         robotNew.moveForward(1.1);
         double lastTime = getRuntime();
