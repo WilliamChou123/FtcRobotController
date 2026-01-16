@@ -9,33 +9,45 @@ import com.shprobotics.pestocore.drivebases.controllers.MecanumController;
 import com.shprobotics.pestocore.drivebases.controllers.TeleOpController;
 import com.shprobotics.pestocore.drivebases.trackers.DeterministicTracker;
 import com.shprobotics.pestocore.drivebases.trackers.ThreeWheelOdometryTracker;
-import com.shprobotics.pestocore.hardware.CortexLinkedMotor;
 import com.shprobotics.pestocore.processing.Cerebrum;
 import com.shprobotics.pestocore.processing.ConfigInterface;
 import com.shprobotics.pestocore.processing.FrontalLobe;
 import com.shprobotics.pestocore.processing.MotorCortex;
 import com.shprobotics.pestocore.processing.PestoConfig;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 @Config
 @PestoConfig()
 public class PestoFTCConfig implements ConfigInterface {
     public static boolean initialized = false; // don't mess with this :O
-    public static boolean initializePinpoint = false;
+    public static boolean initializePinpoint = true;
 
     // ODOMETRY
     public static String leftName = "frontLeft";
     public static String centerName = "frontRight";
     public static String rightName = "backRight";
 
-    public static DcMotorSimple.Direction leftDirection = DcMotorSimple.Direction.REVERSE;
+    public static DcMotorSimple.Direction leftDirection = DcMotorSimple.Direction.FORWARD;
     public static DcMotorSimple.Direction centerDirection = DcMotorSimple.Direction.FORWARD;
-    public static DcMotorSimple.Direction rightDirection = DcMotorSimple.Direction.REVERSE;
+    public static DcMotorSimple.Direction rightDirection = DcMotorSimple.Direction.FORWARD;
 
     public static double ODOMETRY_TICKS_PER_INCH = 505.3169;
     public static double FORWARD_OFFSET = -10;
     public static double ODOMETRY_WIDTH = 9.663;
 
+    public static double Afirst = 2;
+    public static double Asec = 0.23;
+    public static double Athird = 0.8;
+    public static double Afour = 30;
+    public static double Afive = 0.5;
+    public static double Asix = 6;
+    public static double Aseven = 6;
+    public static double scales = 0.1;
+
     public static void initialize(HardwareMap hardwareMap) {
+
         MotorCortex.initialize(hardwareMap);
         Cerebrum.initialize();
 

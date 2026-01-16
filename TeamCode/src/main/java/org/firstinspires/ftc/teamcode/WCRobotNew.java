@@ -33,6 +33,7 @@ public class WCRobotNew extends LinearOpMode {
             telemetry.addData("pos", pos);
             telemetry.addData("lastTime", getRuntime() - lastTime);
             telemetry.addData("slidePos", slidePos);
+            telemetry.addData("armROTATION", robotNew.rotation);
 
             robotNew.updateTelemetry(telemetry);
             if (gamepad1.right_bumper) {
@@ -59,6 +60,16 @@ public class WCRobotNew extends LinearOpMode {
 //            if (gamepad1.right_bumper) {
 //                robotNew.resetSlides();
 //            }
+            if (gamepad1.dpad_left) {
+                while (gamepad1.dpad_left) {
+                }
+                robotNew.armTop();
+            }
+            if (gamepad1.dpad_right) {
+                while (gamepad1.dpad_right) {
+                }
+                robotNew.armBlock();
+            }
             robotNew.moveMid(gamepad1.left_trigger);
             if (gamepad1.right_trigger > 0.5) {
                 robotNew.robotOrientedDrive(-gamepad1.left_stick_x * 0.3, gamepad1.left_stick_y * 0.3, gamepad1.right_stick_x * 0.3);

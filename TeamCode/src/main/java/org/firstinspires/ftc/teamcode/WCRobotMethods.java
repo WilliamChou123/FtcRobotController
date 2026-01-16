@@ -39,8 +39,9 @@ public class WCRobotMethods {
 //    DcMotor slide2;
     DcMotor Middle;
     DcMotor Gecko;
+    Servo Arm;
     double imu_zero;
-
+    double rotation;
 
     public WCRobotMethods(HardwareMap hardwareMap, Telemetry t) {
         telemetry = t;
@@ -48,8 +49,7 @@ public class WCRobotMethods {
         Middle = hardwareMap.get(DcMotor.class, "mid");
         Outtake = hardwareMap.get(DcMotor.class, "outtake");
         Gecko = hardwareMap.get(DcMotor.class, "gecko");
-
-
+        Arm = hardwareMap.get(Servo.class, "arm");
 //        slide1 = hardwareMap.get(DcMotor.class, "slide1");
 //        slide2 = hardwareMap.get(DcMotor.class, "slide2");
 
@@ -61,16 +61,13 @@ public class WCRobotMethods {
         deadWheelCenter = hardwareMap.get(DcMotor.class, "frontRight");
         deadWheelRight = hardwareMap.get(DcMotor.class, "backRight");
         deadWheelLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-
         frontLeft.setDirection(FORWARD);
         frontRight.setDirection(REVERSE);
         backLeft.setDirection(FORWARD);
         backRight.setDirection(REVERSE);
-
         arm = hardwareMap.get(Servo.class, "arm");
         imu = hardwareMap.get(BHI260IMU.class, "imu");
-
-
+        rotation = 0;
         IMU.Parameters myIMUparameters;
         myIMUparameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
@@ -82,9 +79,7 @@ public class WCRobotMethods {
     }
 
     public void updateTelemetry(Telemetry telemetry) {
-
         telemetry.update();
-
     }
 
     public void stopAll() {
@@ -100,7 +95,15 @@ public class WCRobotMethods {
     }
 
     public void fieldOrientedDrive() {
+    }
 
+    public void armTop() {
+
+        arm.setPosition(0.25);
+    }
+
+    public void armBlock() {
+        arm.setPosition(1);
     }
 
     public void resetIMU() {
