@@ -1,19 +1,26 @@
 package org.firstinspires.ftc.teamcode;
 
+import static com.shprobotics.pestocore.processing.FrontalLobe.teleOpController;
+import static com.shprobotics.pestocore.processing.FrontalLobe.tracker;
+
 import android.os.CountDownTimer;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.shprobotics.pestocore.processing.MotorCortex;
+
 
 import org.opencv.core.Mat;
 
-@TeleOp(name = "WCRobotNew", group = "Linear Opmode")
-public class WCRobotNew extends LinearOpMode {
+@TeleOp(name = "WCRobotField", group = "Linear Opmode")
+public class WCRobotField extends BaseRobot {
     WCRobotMethods robotNew;
 
     @Override
     public void runOpMode() {
+
+
         robotNew = new WCRobotMethods(hardwareMap, telemetry);
         double lastTime = getRuntime();
 //        robotNew.Outtake.setDirection(DcMotor.Direction.REVERSE);
@@ -23,17 +30,19 @@ public class WCRobotNew extends LinearOpMode {
         int pos = 45;
         int slidePos = 0;
         boolean pauseSlide = false;
+        PestoFTCConfig.initializePinpoint = true;
+        super.runOpMode();
         while (opModeIsActive() && !isStopRequested()) {
             if (gamepad1.left_bumper) {
                 robotNew.imu.resetYaw();
                 robotNew.resetIMU();
             }
 
-
-            telemetry.addData("pos", pos);
-            telemetry.addData("lastTime", getRuntime() - lastTime);
-            telemetry.addData("slidePos", slidePos);
-            telemetry.addData("armROTATION", robotNew.rotation);
+//
+//            telemetry.addData("pos", pos);
+//            telemetry.addData("lastTime", getRuntime() - lastTime);
+//            telemetry.addData("slidePos", slidePos);
+//            telemetry.addData("armROTATION", robotNew.rotation);
 
             robotNew.updateTelemetry(telemetry);
             if (gamepad1.right_bumper) {
@@ -53,17 +62,7 @@ public class WCRobotNew extends LinearOpMode {
                 lastTime = getRuntime();
             }
             robotNew.moveMid(gamepad1.left_trigger);
-//            if (slidePos >= 0 && slidePos < 1000) {
-//                slidePos += Math.round(gamepad1.left_stick_y);
-//            }
-//            if (gamepad2.left_stick_y > 0.1) {
-//                robotNew.moveSlide1(400);
-//            }
-////            robotNew.moveSlide1(slidePos);
-//
-//            if (gamepad1.right_bumper) {
-//                robotNew.resetSlides();
-//            }
+
             if (gamepad1.dpad_left) {
                 while (gamepad1.dpad_left) {
                 }
@@ -75,11 +74,27 @@ public class WCRobotNew extends LinearOpMode {
                 robotNew.armBlock();
             }
 
-            if (gamepad1.right_trigger > 0.5) {
-                robotNew.robotOrientedDrive(gamepad1.left_stick_x * 0.3, -gamepad1.left_stick_y * 0.3, gamepad1.right_stick_x * 0.3);
-            } else {
-                robotNew.robotOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+            if (gamepad1.b) {
+                tracker.reset();
+                teleOpController.resetIMU();
             }
+
+            telemetry.addData("x", tracker.getCurrentPosition().getX());
+            telemetry.addData("y", tracker.getCurrentPosition().getY());
+            telemetry.addData("r", tracker.getCurrentPosition().getHeadingRadians());
+            telemetry.update();
+            MotorCortex.update();
+            tracker.update();
+
+            if (gamepad1.right_trigger > 0.5) {
+                teleOpController.driveFieldCentric(-gamepad1.left_stick_y * 0.3, gamepad1.left_stick_x * 0.3, gamepad1.right_stick_x * 0.3);
+
+            } else {
+
+                teleOpController.driveFieldCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            }
+
+
         }
     }
 }

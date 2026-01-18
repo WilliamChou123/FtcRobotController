@@ -1,15 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.os.CountDownTimer;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.opencv.core.Mat;
-
-@TeleOp(name = "WCRobotNew", group = "Linear Opmode")
-public class WCRobotNew extends LinearOpMode {
+@TeleOp(name = "NEW", group = "Linear Opmode")
+public class NEW extends LinearOpMode {
     WCRobotMethods robotNew;
 
     @Override
@@ -23,6 +18,7 @@ public class WCRobotNew extends LinearOpMode {
         int pos = 45;
         int slidePos = 0;
         boolean pauseSlide = false;
+        boolean reverseDrive = false;
         while (opModeIsActive() && !isStopRequested()) {
             if (gamepad1.left_bumper) {
                 robotNew.imu.resetYaw();
@@ -37,15 +33,19 @@ public class WCRobotNew extends LinearOpMode {
 
             robotNew.updateTelemetry(telemetry);
             if (gamepad1.right_bumper) {
+                robotNew.armTop();
                 if (getRuntime() - lastTime > 2.2) {
-                    robotNew.Outtake.setPower(.8);
-                    robotNew.Middle.setPower(.8);
+                    robotNew.Outtake.setPower(.9);
+                    robotNew.Middle.setPower(1);
+                    robotNew.Gecko.setPower(1);
+                    robotNew.Intake.setPower(1);
                 } else {
                     robotNew.Outtake.setPower(.8);
                 }
             } else {
+                robotNew.armBlock();
                 //no Right trigger
-                robotNew.Intake.setPower(gamepad1.left_trigger - (gamepad1.right_trigger));
+                robotNew.Intake.setPower(gamepad1.left_trigger - (gamepad1.right_trigger) + 0.5);
                 robotNew.Outtake.setPower(-(gamepad1.right_trigger));
                 robotNew.Gecko.setPower(-(gamepad1.right_trigger));
                 robotNew.Middle.setPower(-(gamepad1.right_trigger));
@@ -74,10 +74,15 @@ public class WCRobotNew extends LinearOpMode {
                 }
                 robotNew.armBlock();
             }
-
-            if (gamepad1.right_trigger > 0.5) {
-                robotNew.robotOrientedDrive(gamepad1.left_stick_x * 0.3, -gamepad1.left_stick_y * 0.3, gamepad1.right_stick_x * 0.3);
+            if (gamepad1.b) {
+                while (gamepad1.b) {
+                }
+                reverseDrive = !reverseDrive;
+            }
+            if (reverseDrive) {
+                robotNew.robotOrientedDrive(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
             } else {
+
                 robotNew.robotOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             }
         }

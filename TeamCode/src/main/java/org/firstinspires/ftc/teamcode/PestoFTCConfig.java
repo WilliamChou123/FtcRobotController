@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -31,20 +32,21 @@ public class PestoFTCConfig implements ConfigInterface {
 
     public static DcMotorSimple.Direction leftDirection = DcMotorSimple.Direction.FORWARD;
     public static DcMotorSimple.Direction centerDirection = DcMotorSimple.Direction.FORWARD;
-    public static DcMotorSimple.Direction rightDirection = DcMotorSimple.Direction.FORWARD;
+    public static DcMotorSimple.Direction rightDirection = DcMotorSimple.Direction.REVERSE;
 
     public static double ODOMETRY_TICKS_PER_INCH = 505.3169;
     public static double FORWARD_OFFSET = -10;
     public static double ODOMETRY_WIDTH = 9.663;
 
     public static double Afirst = 2;
-    public static double Asec = 0.23;
-    public static double Athird = 0.8;
-    public static double Afour = 30;
-    public static double Afive = 0.5;
-    public static double Asix = 6;
-    public static double Aseven = 6;
-    public static double scales = 0.1;
+    public static double Asec = 0.17;
+    public static double Athird = 0.68;
+    public static double Bfirst = 1.78;
+    public static double Bsec = 0.29;
+    public static double Bthird = 0.92;
+
+    public static double range = 13;
+    public static ArrayList<Double> pos = new ArrayList<>();
 
     public static void initialize(HardwareMap hardwareMap) {
 
@@ -83,7 +85,12 @@ public class PestoFTCConfig implements ConfigInterface {
                     .build();
 
             TeleOpController teleOpController = new TeleOpController(driveController, hardwareMap);
-            teleOpController.useTrackerIMU(tracker);
+//            teleOpController.useTrackerIMU(tracker);
+
+            teleOpController.configureIMU(new RevHubOrientationOnRobot(
+                    RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                    RevHubOrientationOnRobot.UsbFacingDirection.UP
+            ));
 
             teleOpController.setSpeedController(gamepad -> 1.0);
 

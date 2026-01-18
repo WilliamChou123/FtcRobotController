@@ -18,6 +18,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import com.shprobotics.pestocore.processing.MotorCortex;
+
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Mat;
@@ -26,10 +28,11 @@ public class WCRobotMethods {
     DcMotor frontLeft;
     DcMotor backRight;
     DcMotor backLeft;
+    DcMotor frontRight;
+
     DcMotor Outtake;
     DcMotor Intake;
     Servo arm;
-    DcMotor frontRight;
     BHI260IMU imu;
     Telemetry telemetry;
     DcMotor deadWheelLeft;
@@ -98,12 +101,11 @@ public class WCRobotMethods {
     }
 
     public void armTop() {
-
         arm.setPosition(0.25);
     }
 
     public void armBlock() {
-        arm.setPosition(1);
+        arm.setPosition(0.9);
     }
 
     public void resetIMU() {
@@ -162,6 +164,14 @@ public class WCRobotMethods {
         long start = System.currentTimeMillis();
         while (System.currentTimeMillis() - start < time * 1000) {
             robotOrientedDrive(0, 0, -0.5);
+        }
+        stopAll();
+    }
+
+    public void rotatenormal(double time) {
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < time * 1000) {
+            robotOrientedDrive(0, 0, 0.5);
         }
         stopAll();
     }
