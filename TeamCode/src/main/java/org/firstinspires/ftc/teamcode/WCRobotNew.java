@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.os.CountDownTimer;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.opencv.core.Mat;
 
 @TeleOp(name = "WCRobotNew", group = "Linear Opmode")
+@Disabled
+
 public class WCRobotNew extends LinearOpMode {
     WCRobotMethods robotNew;
 

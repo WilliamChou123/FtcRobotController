@@ -7,9 +7,12 @@ import static org.firstinspires.ftc.teamcode.PestoFTCConfig.Asec;
 import static org.firstinspires.ftc.teamcode.PestoFTCConfig.Athird;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name = "WCRobotAutoBLUE")
+@Disabled
+
 public class WCRobotAutoBLUE extends LinearOpMode {
     WCRobotMethods robotNew;
 

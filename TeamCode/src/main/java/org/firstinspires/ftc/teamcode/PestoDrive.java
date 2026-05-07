@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.BaseRobot;
 
 
 @TeleOp(name = ":(")
+@Disabled
+
 public class PestoDrive extends BaseRobot {
     @Override
     public void runOpMode() {

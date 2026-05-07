@@ -4,9 +4,12 @@ package org.firstinspires.ftc.teamcode;
 import static org.firstinspires.ftc.teamcode.PestoFTCConfig.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name = "WCRobotAuto")
+@Disabled
+
 public class WCRobotAutoRED extends LinearOpMode {
     WCRobotMethods robotNew;
 

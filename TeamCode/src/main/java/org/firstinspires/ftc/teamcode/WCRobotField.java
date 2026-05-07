@@ -5,6 +5,7 @@ import static com.shprobotics.pestocore.processing.FrontalLobe.tracker;
 
 import android.os.CountDownTimer;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +15,8 @@ import com.shprobotics.pestocore.processing.MotorCortex;
 import org.opencv.core.Mat;
 
 @TeleOp(name = "WCRobotField", group = "Linear Opmode")
+@Disabled
+
 public class WCRobotField extends BaseRobot {
     WCRobotMethods robotNew;
 
