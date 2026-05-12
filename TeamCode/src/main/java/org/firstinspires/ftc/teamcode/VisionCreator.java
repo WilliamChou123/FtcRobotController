@@ -39,7 +39,6 @@ public class VisionCreator {
                 .addProcessor(tagProcessor)
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-
                 .build();
     }
 

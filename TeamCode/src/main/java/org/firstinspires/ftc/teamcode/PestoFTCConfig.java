@@ -38,15 +38,13 @@ public class PestoFTCConfig implements ConfigInterface {
     public static double FORWARD_OFFSET = -10;
     public static double ODOMETRY_WIDTH = 9.663;
 
-    public static double Afirst = 2;
-    public static double Asec = 0.17;
-    public static double Athird = 0.68;
-    public static double Bfirst = 1.78;
-    public static double Bsec = 0.29;
-    public static double Bthird = 0.92;
-
-    public static double range = 13;
-    public static ArrayList<Double> pos = new ArrayList<>();
+//    public static double Afirst = 2;
+//    public static double Asec = 0.17;
+//    public static double Athird = 0.68;
+//    public static double Bfirst = 1.78;
+//    public static double Bsec = 0.29;
+//    public static double Bthird = 0.92;
+//    public static double range = 13;
 
     public static void initialize(HardwareMap hardwareMap) {
 

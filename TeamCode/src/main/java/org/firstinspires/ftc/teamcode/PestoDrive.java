@@ -9,9 +9,7 @@ import com.shprobotics.pestocore.processing.MotorCortex;
 import org.firstinspires.ftc.teamcode.BaseRobot;
 
 
-@TeleOp(name = ":(")
-@Disabled
-
+@TeleOp
 public class PestoDrive extends BaseRobot {
     @Override
     public void runOpMode() {
