@@ -3,16 +3,15 @@ package org.firstinspires.ftc.teamcode;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 import com.shprobotics.pestocore.devices.GamepadInterface;
-import com.shprobotics.pestocore.devices.GamepadKey;
 import com.shprobotics.pestocore.drivebases.controllers.MecanumController;
 import com.shprobotics.pestocore.drivebases.controllers.TeleOpController;
 import com.shprobotics.pestocore.drivebases.trackers.DeterministicTracker;
@@ -25,8 +24,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 
-@TeleOp(group = "Charlie")
-public class Charlie extends LinearOpMode {
+@Autonomous(group = "Charlie")
+public class CharlieAuto extends LinearOpMode {
     Servo hood;
     Servo ballBlock;
     Servo turret0, turret1;
@@ -48,6 +47,7 @@ public class Charlie extends LinearOpMode {
     public TeleOpController teleOpController;
     public GamepadInterface gamepadInterface1;
     public double turretOffset = 0;
+    double autoIntake;
 
     @Override
     public void runOpMode() {
@@ -99,88 +99,106 @@ public class Charlie extends LinearOpMode {
         ballBlock = hardwareMap.get(Servo.class, "ballblock");
 
         //Vision
-        visionCreator = new VisionCreator(hardwareMap);
-        tagProcessor = visionCreator.getTagProcessor();
+
+
         teleOpController.resetIMU();
         waitForStart();
         double initX = 0;
         double initY = 0;
-        double autoIntake = 0;
-
-        while (opModeIsActive() && !isStopRequested()) {
+        autoIntake = 0;
+        hood.setPosition(hoodMode * 0.2 - 0.1);
+        double start = getRuntime();
+        startTime = getRuntime();
+        while (getRuntime() - startTime < 3.8)
+            robotOrientedDrive(0, 0.2, 0);
+        startTime = getRuntime();
+        start = getRuntime();
+        robotOrientedDrive(0, 0, 0);
+        while (getRuntime() - start < 6 && opModeIsActive() && !isStopRequested()) {
             MotorCortex.update();
-
-            gamepadInterface1.update();
-            //Power to intake and shooter, GamepadKey.a=REVERSE
-            intake0.setPower(-gamepad1.left_trigger + (gamepad1.a ? 1 : 0) - autoIntake);
-            intake1.setPower(-gamepad1.left_trigger + (gamepad1.a ? 1 : 0) - autoIntake);
-            shooter0.setPower(gamepad1.right_trigger * shootPower);
-            shooter1.setPower(gamepad1.right_trigger * shootPower);
-
-            //Auto Move Ball Blocker
-            if (gamepad1.right_trigger > 0.1) {
-                if (getRuntime() - startTime > 1.5) {
-                    if (AUTO_BLOCKER) blockerMode = 3.1;
-                }
-
-                if (shooter0.getVelocity() <= -1240)
-                    autoIntake = 1;
-                else
-                    autoIntake = 0;
-
-            } else {
-                startTime = getRuntime();
-                if (AUTO_BLOCKER) blockerMode = 4;
-
+            intake0.setPower(-autoIntake);
+            intake1.setPower(-autoIntake);
+            shooter0.setPower(0.58);
+            shooter1.setPower(0.58);
+            if (getRuntime() - startTime > 1.5) {
+                if (AUTO_BLOCKER) blockerMode = 3.1;
+            }
+            if (shooter0.getVelocity() <= -1200)
+                autoIntake = 1;
+            else
                 autoIntake = 0;
-            }
+
+
             updateBlockerPosition();
-            gamepad1.setLedColor(0, 255, 0, 1000);
-            //Set Power of Outtake
-            if (gamepad1.dpadUpWasReleased()) shootPower += 0.05;
-            if (gamepad1.dpadDownWasReleased()) shootPower -= 0.05;
-
-            if (gamepad1.b) {
-                teleOpController.resetIMU();
-                gamepad1.rumble(100);
-            }
-            if (gamepad1.y) {
-                turretOffset = Math.toDegrees(teleOpController.getHeading());
-                gamepad1.rumble(100);
-            }
-            //Hood Deg Adjust
-            if (gamepad1.rightBumperWasReleased()) {
-                hoodMode++;
-                if (hoodMode == 3) hoodMode = 0;
-            }
-            hood.setPosition(hoodMode * 0.2 - 0.1);
-
-
-            //Drive
-            teleOpController.driveFieldCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x);
-//          robotOrientedDrive(-gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x);
-
-            //record init x and y from target as x0 y0
-            //x' and y' is x0-imux and y0-imuy
-            // theta = tan^-1(x'/y') or pi-that
-
-//get velocity in radians /2pi
-            //IMU Turret
-            double headingDeg = Math.toDegrees(teleOpController.getHeading());
-
-
-            double relativeAngle =
-                    AngleUnit.normalizeDegrees(headingDeg - turretOffset);
-            double servoPos = (relativeAngle + 180) / 360.0;
-            servoPos = Range.clip(servoPos, 0.2, 1);
-            if (turretOffset != 0)
-                turretAngle(servoPos);
-//            turn = Range.clip((Math.toDegrees(teleOpController.getHeading()) + 180) / 360, -90, 90);
-//            turretAngle(turn);
-
-
             updateTelemetry(telemetry);
         }
+        if (AUTO_BLOCKER) blockerMode = 4;
+        updateBlockerPosition();
+        intake0.setPower(0);
+        intake1.setPower(0);
+        shooter0.setPower(0);
+        shooter1.setPower(0);
+        startTime = getRuntime();
+
+        while (getRuntime() - startTime < 0.35 && opModeIsActive() && !isStopRequested())
+            robotOrientedDrive(0, 0, 0);
+
+        startTime = getRuntime();
+        while (getRuntime() - startTime < 0.37 && opModeIsActive() && !isStopRequested())
+            robotOrientedDrive(0, 0, 0.3);
+        startTime = getRuntime();
+
+        while (getRuntime() - startTime < 1.98 && opModeIsActive() && !isStopRequested())
+            robotOrientedDrive(0.3, 0, 0.01);
+        startTime = getRuntime();
+
+        while (getRuntime() - startTime < 5 && opModeIsActive() && !isStopRequested()) {
+            robotOrientedDrive(0, -0.2, 0);
+            intake0.setPower(-0.75);
+            intake1.setPower(-0.75);
+        }
+        startTime = getRuntime();
+
+        while (getRuntime() - startTime < 3.4 && opModeIsActive() && !isStopRequested()) {
+            robotOrientedDrive(0, 0.2, 0);
+            intake0.setPower(0);
+            intake1.setPower(0);
+        }
+
+        startTime = getRuntime();
+
+        while (getRuntime() - startTime < 1.35 && opModeIsActive() && !isStopRequested()) {
+
+            robotOrientedDrive(-0.3, 0, -0.01);
+        }
+        startTime = getRuntime();
+
+        while (getRuntime() - startTime < 0.2 && opModeIsActive() && !isStopRequested())
+            robotOrientedDrive(0, 0, -0.3);
+        startTime = getRuntime();
+
+
+        robotOrientedDrive(0, 0, 0);
+        start = getRuntime();
+        while (getRuntime() - start < 7 && opModeIsActive() && !isStopRequested()) {
+            MotorCortex.update();
+            intake0.setPower(-autoIntake);
+            intake1.setPower(-autoIntake);
+            shooter0.setPower(0.58);
+            shooter1.setPower(0.58);
+
+            if (AUTO_BLOCKER) blockerMode = 3.1;
+
+            if (shooter0.getVelocity() <= -1200)
+                autoIntake = 1;
+            else
+                autoIntake = 0;
+
+            updateBlockerPosition();
+            updateTelemetry(telemetry);
+        }
+
+
     }
 
     public double getDistanceFromTag() {
@@ -198,15 +216,9 @@ public class Charlie extends LinearOpMode {
     }
 
     private void updateBlockerPosition() {
-        if (AUTO_BLOCKER) {
-            ballBlock.setPosition(blockerMode * 0.4 - 0.8);
-        } else {
-            if (gamepad1.leftBumperWasReleased()) {
-                blockerMode++;
-                if (blockerMode == 5) blockerMode = 3;
-            }
 
-        }
+        ballBlock.setPosition(blockerMode * 0.4 - 0.8);
+
     }
 
     @Override
@@ -226,8 +238,6 @@ public class Charlie extends LinearOpMode {
         double rpm2 = (shooter1.getVelocity() / 28.0) * 60.0;
         telemetry.addData("RPM2", rpm2);
         telemetry.addData("VELOCITY1", shooter0.getVelocity());
-
-
         super.updateTelemetry(telemetry);
     }
 

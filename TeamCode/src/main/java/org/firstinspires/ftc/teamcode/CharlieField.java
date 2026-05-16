@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+@TeleOp(group = "Charlie")
 public class CharlieField extends BaseRobot {
     @Override
     public void runOpMode() {

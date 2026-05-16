@@ -29,11 +29,11 @@ public class WCRobotAutoRED extends LinearOpMode {
         robotNew.initImu();
         robotNew.resetIMU();
         robotNew.armTop();
-        robotNew.moveForward(Bfirst);
-        sleep(1000);
-        robotNew.rotatenormal(Bsec);
-        sleep(1000);
-        robotNew.moveForward(Bthird);
+//        robotNew.moveForward(Bfirst);
+//        sleep(1000);
+//        robotNew.rotatenormal(Bsec);
+//        sleep(1000);
+//        robotNew.moveForward(Bthird);
         double lastTime = getRuntime();
         while (getRuntime() - lastTime < 8 && !isStopRequested()) {
             telemetry.addData("time", getRuntime());

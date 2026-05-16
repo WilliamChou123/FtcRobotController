@@ -1,10 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.PestoFTCConfig.Afirst;
-
-import static org.firstinspires.ftc.teamcode.PestoFTCConfig.Asec;
-
-import static org.firstinspires.ftc.teamcode.PestoFTCConfig.Athird;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -31,11 +26,11 @@ public class WCRobotAutoBLUE extends LinearOpMode {
         robotNew.initImu();
         robotNew.resetIMU();
         robotNew.armTop();
-        robotNew.moveForward(Afirst);
-        sleep(1000);
-        robotNew.rotateOp(Asec);
-        sleep(1000);
-        robotNew.moveForward(Athird);
+//        robotNew.moveForward(Afirst);
+//        sleep(1000);
+//        robotNew.rotateOp(Asec);
+//        sleep(1000);
+//        robotNew.moveForward(Athird);
         double lastTime = getRuntime();
         while (getRuntime() - lastTime < 8 && !isStopRequested()) {
             telemetry.addData("time", getRuntime());

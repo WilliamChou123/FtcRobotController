@@ -26,9 +26,14 @@ public class PestoFTCConfig implements ConfigInterface {
     public static boolean initializePinpoint = true;
 
     // ODOMETRY
-    public static String leftName = "frontLeft";
-    public static String centerName = "frontRight";
-    public static String rightName = "backRight";
+
+    //        DeadWheels:
+//        control 0 = backLeft
+//            expansion 1 = backRight
+//            control 1= horizontal
+    public static String leftName = "frontRight";
+    public static String centerName = "backRight";
+    public static String rightName = "intake1";
 
     public static DcMotorSimple.Direction leftDirection = DcMotorSimple.Direction.FORWARD;
     public static DcMotorSimple.Direction centerDirection = DcMotorSimple.Direction.FORWARD;
