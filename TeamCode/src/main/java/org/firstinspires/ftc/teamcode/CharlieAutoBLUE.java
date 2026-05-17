@@ -5,12 +5,10 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 import com.shprobotics.pestocore.devices.GamepadInterface;
 import com.shprobotics.pestocore.drivebases.controllers.MecanumController;
 import com.shprobotics.pestocore.drivebases.controllers.TeleOpController;
@@ -19,13 +17,12 @@ import com.shprobotics.pestocore.processing.FrontalLobe;
 import com.shprobotics.pestocore.processing.MotorCortex;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 
 @Autonomous(group = "Charlie")
-public class CharlieAuto extends LinearOpMode {
+public class CharlieAutoBLUE extends LinearOpMode {
     Servo hood;
     Servo ballBlock;
     Servo turret0, turret1;
@@ -147,7 +144,7 @@ public class CharlieAuto extends LinearOpMode {
         while (getRuntime() - startTime < 0.37 && opModeIsActive() && !isStopRequested())
             robotOrientedDrive(0, 0, 0.3);
         startTime = getRuntime();
-
+        
         while (getRuntime() - startTime < 1.98 && opModeIsActive() && !isStopRequested())
             robotOrientedDrive(0.3, 0, 0.01);
         startTime = getRuntime();
@@ -169,12 +166,12 @@ public class CharlieAuto extends LinearOpMode {
 
         while (getRuntime() - startTime < 1.35 && opModeIsActive() && !isStopRequested()) {
 
-            robotOrientedDrive(-0.3, 0, -0.01);
+            robotOrientedDrive(-0.38, 0, -0.01);
         }
         startTime = getRuntime();
 
         while (getRuntime() - startTime < 0.2 && opModeIsActive() && !isStopRequested())
-            robotOrientedDrive(0, 0, -0.3);
+            robotOrientedDrive(0, 0, -0.4);
         startTime = getRuntime();
 
 

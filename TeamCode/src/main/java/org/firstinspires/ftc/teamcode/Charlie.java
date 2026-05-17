@@ -114,8 +114,8 @@ public class Charlie extends LinearOpMode {
             //Power to intake and shooter, GamepadKey.a=REVERSE
             intake0.setPower(-gamepad1.left_trigger + (gamepad1.a ? 1 : 0) - autoIntake);
             intake1.setPower(-gamepad1.left_trigger + (gamepad1.a ? 1 : 0) - autoIntake);
-            shooter0.setPower(gamepad1.right_trigger * shootPower);
-            shooter1.setPower(gamepad1.right_trigger * shootPower);
+            shooter0.setPower(gamepad1.right_trigger * shootPower + (gamepad1.x ? 1 : 0));
+            shooter1.setPower(gamepad1.right_trigger * shootPower + (gamepad1.x ? 1 : 0));
 
             //Auto Move Ball Blocker
             if (gamepad1.right_trigger > 0.1) {
