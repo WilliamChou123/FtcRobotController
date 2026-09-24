@@ -33,6 +33,8 @@ repositories {
     maven {
         url = "https://repo.dairy.foundation/releases"
     }
+    maven { url = 'https://jitpack.io' }
+
 }
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
@@ -42,7 +44,29 @@ android {
     }
 }
 
+configurations {
+    // Plain-JVM runtime used only by the desktop emulator JavaExec task.
+    emulatorRuntime
+}
+
 dependencies {
     implementation project(':FtcRobotController')
         implementation("dev.frozenmilk.sinister:Sloth:0.3.2")
+    testImplementation 'com.github.alonHamb:ftc-control-hub-emulator:v1.0.3'
+    emulatorRuntime 'com.github.alonHamb:ftc-control-hub-emulator:v1.0.3'
+
+}
+
+tasks.register('runAutoPathEmulator', JavaExec) {
+    group = 'application'
+    description = 'Launches the desktop FTC AutoPath emulator GUI.'
+
+    def compileEmulator = tasks.named('compileDebugUnitTestJavaWithJavac')
+    dependsOn compileEmulator
+    classpath = files(compileEmulator.get().destinationDirectory)
+    classpath += compileEmulator.get().classpath
+    classpath += configurations.emulatorRuntime
+
+    mainClass.set('org.firstinspires.ftc.teamcode.emulator.EmulatorRunner')
+    standardInput = System.in
 }
